@@ -1,11 +1,13 @@
+import SignUpForm from "./components/SignUpForm.jsx"
+import Authenticate from "./components/Authenticate.jsx"
 
-
-function App() {
+const App = () => {
 
 
   return (
     <>
-      
+      <SignUpForm />
+      <Authenticate />
     </>
   )
 }
