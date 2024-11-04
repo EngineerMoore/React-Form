@@ -1,10 +1,17 @@
 import { useState } from "react"
 
-const SignUpForm = () => {
+const SignUpForm = ({users, setUsers}) => {
   const [usernameInput, setUsernameInput] = useState(``);
   const [passwordInput, setPasswordInput] = useState(``);
   const [error, setError] = useState(null)
+  const [token, setToken]=useState("")
 
+  const updateUsersList = async () => {
+    console.log({username: usernameInput, token: token});
+   const addUser = [...users,{username: usernameInput, token: token}];
+   await setUsers(addUser);
+   console.log(users)
+  }
 
   const submitForm = async(event) => {
     event.preventDefault();
@@ -15,21 +22,24 @@ const SignUpForm = () => {
                 "Content-Type": "application/json"
               },
               body: JSON.stringify({
-                username:"${usernameInput}",
-                password:"${passwordInput}"
+                username: usernameInput,
+                password: passwordInput
               })
             }
-          );
-          const newResponse = await fetch("https://fsa-jwt-practice.herokuapp.com/signup");
-          const result = await newResponse.json();
-          console.log(result);
-        } catch(error) {setError(error.message)}
-      };
+          )
+          const result = await response.json();
+          console.log(result.token);
+          const retrievedToken = result.token;
+          console.log(retrievedToken);
+          setToken(retrievedToken);
+          console.log(token)
+          ;
+        } catch(error) {setError(error.message)};
+        updateUsersList();
+      }
  
   return (
     <>
-      <h1>React Form</h1>
-      <section>
         <h2>Sign Up</h2>
         {error&& <p>{error}</p>}
         <form onSubmit={submitForm}>
@@ -39,7 +49,6 @@ const SignUpForm = () => {
           </input>
           <button>Sign Up</button>
         </form>
-      </section>
     </>
   )
 }
